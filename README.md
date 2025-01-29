@@ -1,6 +1,7 @@
-# Best practice on publishing cloud optimized data to BGDI
+# About
+This document summarizes **best practice on publishing cloud optimized data to BGDI**
 
-## Decision tree
+# Decision tree
 ```mermaid
 graph TD
   start[*Start*: Generate<br> cloud-optimized GeoTIFF] --> purpose{What's the main purpose?}
@@ -29,10 +30,10 @@ graph TD
 ```
 
 
-## Raster
+# Raster
 Apply the optimization steps according to the use case and publish cloud-optimized GeoTIFF [COG](https://cogeo.org) using a recent version of [gdal](https://gdal.org). Windows users may use the OSGeo4WShell provided by [QGIS](https://qgis.org).
 
-### lossless raster
+## lossless raster
 
 Apply optimization steps for raster data
 1. prepare input data at a reasonable precision (i.e. `cm` instead of `µm` or `nm` i.e. in the data source)
@@ -52,14 +53,14 @@ _Notes on `LERC_ZSTD` (lossy/lossless) compression:_
 - _has been [developed and published by ESRI](https://github.com/esri/lerc/) and is supported in their products_
 - _supported in STAC-browser v3.4_
 
-### lossy visual image
+## lossy visual image
 
 1. compress your data using
 ```
 gdal_translate -a_srs EPSG:2056 -of COG -co COMPRESS=JPEG -co NUM_THREADS=ALL_CPUS -co BIGTIFF=YES -co STATISTICS=YES -co QUALITY=70 ... <input.tif> <output.tif>
 ```
 
-### lossy numerical raster
+## lossy numerical raster
 
 1. compress your data using
 ```
@@ -69,10 +70,10 @@ while
 - choosing a threshold (limited error tolerance i.e. `0.01` for `cm`) for better lossy compression ratio
 
 
-## Vector
+# Vector
 Apply the optimization steps following the use case and publish vector data using a recent version of [ogr](https://gdal.org). Windows users may use the OSGeo4WShell provided by [QGIS](https://qgis.org).
 
-### GeoPackage
+## GeoPackage
 [GeoPackage](https://www.geopackage.org) often provides better compression and can be streamed.
 
 ```
@@ -80,7 +81,7 @@ ogr2ogr -f GPKG output.gpkg input.shp
 ```
 
 
-### GeoParquet (can be provided additionally)
+## GeoParquet (can be provided additionally)
 [GeoParquet](https://geoparquet.org) often provides better compression and can be streamed.
 
 ```
@@ -88,7 +89,7 @@ ogr2ogr -f parquet output.parquet input.shp
 ```
 
 
-## Point Cloud
+# Point Cloud
 Apply the optimization steps and publish cloud-optimized PointCloud [COPC](https://copc.io) using a recent version of [pdal](https://pdal.io). Windows users may use the OSGeo4WShell provided by [QGIS](https://qgis.org).
 
 ```
