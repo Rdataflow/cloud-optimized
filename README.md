@@ -79,6 +79,10 @@ Apply the optimization steps following the use case and publish vector data usin
 ```
 ogr2ogr -f GPKG output.gpkg input.shp
 ```
+optionally: alter layername
+```
+ogrinfo output.gpkg -sql "ALTER TABLE layer_name RENAME TO new_layer_name"
+```
 
 
 ## GeoParquet (can be provided additionally)
