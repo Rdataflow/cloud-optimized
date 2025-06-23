@@ -89,8 +89,14 @@ ogrinfo output.gpkg -sql "ALTER TABLE layer_name RENAME TO new_layer_name"
 [GeoParquet](https://geoparquet.org) often provides better compression and can be streamed.
 
 ```
-ogr2ogr -f parquet output.parquet input.shp
+ogr2ogr -f parquet -lco COMPRESSION=ZSTD -lco GEOMETRY_ENCODING=GEOARROW -lco SORT_BY_BBOX=YES output.parquet input.shp
 ```
+to further optimize parquet for streaming and improved compression
+```python
+import geopandas as gpd
+gpd.read_parquet('input.parquet').to_parquet('output.parquet', compression="zstd", geometry_encoding="geoarrow", schema_version="1.1.0", compression_level=22, row_group_size=16384)
+```
+note: geoarrow is only supported in recent versions of GDAL 3.9+
 
 
 # Point Cloud
