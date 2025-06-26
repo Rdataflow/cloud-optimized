@@ -1,6 +1,9 @@
 # About
 This document summarizes **best practice on publishing cloud optimized data to BGDI**
 
+# Raster
+Apply the optimization steps according to the use case and publish cloud-optimized GeoTIFF [COG](https://cogeo.org) using a recent version of [gdal](https://gdal.org). Windows users may use the OSGeo4WShell provided by [QGIS](https://qgis.org).
+
 # Decision tree
 ```mermaid
 graph TD
@@ -29,9 +32,6 @@ graph TD
   click lerc_lossless "#lossless-raster"
 ```
 
-
-# Raster
-Apply the optimization steps according to the use case and publish cloud-optimized GeoTIFF [COG](https://cogeo.org) using a recent version of [gdal](https://gdal.org). Windows users may use the OSGeo4WShell provided by [QGIS](https://qgis.org).
 
 ## lossless raster
 
@@ -89,16 +89,16 @@ ogrinfo output.gpkg -sql "ALTER TABLE layer_name RENAME TO new_layer_name"
 [GeoParquet](https://geoparquet.org) often provides better compression and can be streamed.
 
 ```
-ogr2ogr -f parquet -lco COMPRESSION=ZSTD -lco GEOMETRY_ENCODING=GEOARROW -lco SORT_BY_BBOX=YES output.parquet input.shp
+ogr2ogr -f parquet -lco COMPRESSION=ZSTD -lco GEOMETRY_ENCODING=GEOARROW -lco ROW_GROUP_SIZE=16384 -lco SORT_BY_BBOX=YES -lco WRITE_COVERING_BBOX=NO output.parquet input.shp
 ```
-as of GDAL v3.12 `-lco COMPRESSION_LEVEL=22` may be added for effective `ZSTD` compression. (see https://github.com/OSGeo/gdal/pull/12647)
+- as of GDAL v3.12 `-lco COMPRESSION_LEVEL=22` may be added for effective `ZSTD` compression. (see https://github.com/OSGeo/gdal/pull/12647)
 
-to further optimize parquet for streaming and improved compression
+to further optimize parquet for streaming and improved compression you may in the mean time use
 ```python
 import geopandas as gpd
-gpd.read_parquet('input.parquet').to_parquet('output.parquet', compression="zstd", geometry_encoding="geoarrow", schema_version="1.1.0", compression_level=22, row_group_size=16384)
+gpd.read_parquet('input.parquet').to_parquet('output.parquet', compression="zstd", geometry_encoding="geoarrow", schema_version="1.1.0", compression_level=22, row_group_size=16384, sorting_columns="geometry")
 ```
-note: geoarrow is only supported in recent versions of GDAL 3.9+
+note: geoarrow is only supported in recent versions of GDAL 3.9+ (i.e. packaged in QGIS LTR 3.40+)
 
 
 # Point Cloud
