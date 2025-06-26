@@ -91,6 +91,8 @@ ogrinfo output.gpkg -sql "ALTER TABLE layer_name RENAME TO new_layer_name"
 ```
 ogr2ogr -f parquet -lco COMPRESSION=ZSTD -lco GEOMETRY_ENCODING=GEOARROW -lco SORT_BY_BBOX=YES output.parquet input.shp
 ```
+as of GDAL v3.12 `-lco COMPRESSION_LEVEL=22` may be added for effective `ZSTD` compression. (see https://github.com/OSGeo/gdal/pull/12647)
+
 to further optimize parquet for streaming and improved compression
 ```python
 import geopandas as gpd
