@@ -100,6 +100,11 @@ gpd.read_parquet('input.parquet').to_parquet('output.parquet', compression="zstd
 ```
 note: geoarrow is only supported in recent versions of GDAL 3.9+ (i.e. packaged in QGIS LTR 3.40+)
 
+### further reading
+- [Performance Explorations of GeoParquet (and DuckDB)](https://medium.com/radiant-earth-insights/performance-explorations-of-geoparquet-and-duckdb-84c0185ed399)
+- [The GeoParquet Ecosystem at 1.0.0](https://medium.com/radiant-earth-insights/the-geoparquet-ecosystem-at-1-0-0-96dee8ce9201)
+- [GeoParquet 1.1 coming soon!](https://medium.com/radiant-earth-insights/geoparquet-1-1-coming-soon-9b72c900fbf2)
+- [Sharing some tools for working with GeoParquet](https://medium.com/radiant-earth-insights/sharing-some-tools-for-working-with-geoparquet-fc5667b27373)
 
 # Point Cloud
 Apply the optimization steps and publish cloud-optimized PointCloud [COPC](https://copc.io) using a recent version of [pdal](https://pdal.io). Windows users may use the OSGeo4WShell provided by [QGIS](https://qgis.org).
